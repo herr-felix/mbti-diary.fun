@@ -10,7 +10,7 @@
   (j/db-do-commands 
    sqlite-db
    (j/create-table-ddl 
-    :posts
+    "ENTRIES"
     [[:id :text :primary :key]
      [:type "varchar(4)"]
      [:body "TEXT"]
@@ -18,27 +18,28 @@
     {:entities str/upper-case
      :conditional? true})))
 
-(defn save-post 
-  "Save a post"
-  [post]
-  (j/insert! sqlite-db :posts post))
+(defn save-entry
+  "Save an entry"
+  [entry]
+  (j/insert! sqlite-db "ENTRIES" entry))
 
-(defn get-post 
-  "Get a post by ID"
+(defn get-entry
+  "Get an entry by ID"
   [id]
-  (j/query sqlite-db
-           ["SELECT * FROM POSTS WHERE ID = ?;", id]))
+  (first 
+   (j/query sqlite-db
+            ["SELECT * FROM ENTRIES WHERE ID = ?;", id])))
 
-(defn get-posts
-  "Get posts by type and/or date"
+(defn get-entries
+  "Get entries by type and/or date"
   [& {:keys [type date limit] :or {type nil, date nil, limit 64}}]
   (j/query sqlite-db
            (cond
             ; Date and Type specified, show the 64 from the most recent day
-             (and type date) ["SELECT * FROM POSTS WHERE type = ? AND date = ? limit ?;", type, date, limit]
+             (and type date) ["SELECT * FROM ENTRIES WHERE type = ? AND date = ? limit ?;", type, date, limit]
             ; Only date specified: show from all the types for that day
-             date ["SELECT * FROM POSTS WHERE date = ? limit ?;", date, limit]
+             date ["SELECT * FROM ENTRIES WHERE date = ? limit ?;", date, limit]
             ; Only type specified: Show the last 64
-             type ["SELECT * FROM POSTS WHERE type = ? order by date desc limit ?;" type, limit]
+             type ["SELECT * FROM ENTRIES WHERE type = ? order by date desc limit ?;" type, limit]
             ; Nothing specified: show them all (with the limit)
-             :else  ["SELECT * FROM POSTS order by date desc limit ?;", limit]) ) )
+             :else  ["SELECT * FROM ENTRIES order by date desc limit ?;", limit]) ) )

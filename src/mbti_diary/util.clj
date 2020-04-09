@@ -10,3 +10,5 @@
 
 (defn format-date [date] 
   (.format date-formatter date))
+
+(defn today [] (format-date (java.util.Date.)))
