@@ -26,7 +26,7 @@
 (defn get-entry
   "Get an entry by ID"
   [id]
-  (first 
+  (first
    (j/query sqlite-db
             ["SELECT * FROM ENTRIES WHERE ID = ?;", id])))
 
@@ -36,10 +36,10 @@
   (j/query sqlite-db
            (cond
             ; Date and Type specified, show the 64 from the most recent day
-             (and type date) ["SELECT * FROM ENTRIES WHERE type = ? AND date = ? limit ?;", type, date, limit]
+             (and type date) ["SELECT * FROM ENTRIES WHERE type = ? AND date = ?, ROWID desc limit ?;", type, date, limit]
             ; Only date specified: show from all the types for that day
-             date ["SELECT * FROM ENTRIES WHERE date = ? limit ?;", date, limit]
+             date ["SELECT * FROM ENTRIES WHERE date = ? order by ROWID desc limit ?;", date, limit]
             ; Only type specified: Show the last 64
-             type ["SELECT * FROM ENTRIES WHERE type = ? order by date desc limit ?;" type, limit]
+             type ["SELECT * FROM ENTRIES WHERE type = ? order by date desc, ROWID desc limit ?;" type, limit]
             ; Nothing specified: show them all (with the limit)
-             :else  ["SELECT * FROM ENTRIES order by date desc limit ?;", limit]) ) )
+             :else  ["SELECT * FROM ENTRIES order by date desc, ROWID desc limit ?;", limit]) ) )

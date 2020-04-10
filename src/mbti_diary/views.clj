@@ -74,7 +74,7 @@
     [:div.row
      [:div.col-md-12
       [:h2.text-center "Hello unique human being!"]
-      [:p.text-center "This is a public diary where people, with different types, tell events of their day anonymously. Please, don't write anythin too obsene (looking at you, ENTP)."]]
+      [:p.text-center "This is a public diary where people, with different types, tell events of their day anonymously. Please, don't write anything too obscene (looking at you, ENTP)."]]
      (entry-list entries)]))
      
 

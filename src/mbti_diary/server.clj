@@ -8,6 +8,7 @@
    [ring.middleware.params :refer [wrap-params]]
    [mbti-diary.util :refer [mbti-types uuid today]]
    [mbti-diary.db :as db]
+   [mbti-diary.caching :as cache]
    [mbti-diary.views :as views]))
 
 (s/def ::type mbti-types)
@@ -16,7 +17,7 @@
 
 
 (defn home [_]
-  (let [entries (db/get-entries :limit 10)]
+  (let [entries (cache/get-or-do! :home-feed #(db/get-entries :limit 16))]
        (views/home entries)))
 
 (defn entry-form [req]
@@ -27,6 +28,8 @@
     (if (s/valid? ::entry-post entry)
       (do
         (db/save-entry entry)
+        (cache/invalidate! :home-feed
+                          (:type entry))
         (redirect (str "/entry/" (:id entry))))
       ;; TODO: Error message
       (redirect "/entry"))))
@@ -39,7 +42,7 @@
 (defn per-type [req]
   (let [type (get-in req [:route-params :type])]
     (if (contains? mbti-types type)
-      (views/per-type type (db/get-entries :type type)) 
+      (views/per-type type (cache/get-or-do! type #(db/get-entries :type type)))
       (redirect "/")) ))
 
 (defn not-found [_] 
