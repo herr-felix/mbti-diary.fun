@@ -40,7 +40,7 @@
          [:body 
           [:div.container 
            [:a.text-decoration-none {:href "/"}
-            [:h1.text-center.title  "MBTI Diary"]]
+            [:h1.text-center.title.mt-2  "MBTI Diary"]]
            [:p.text-center "What's on your mind today?"]
            (types-bare)
            [:br]
@@ -51,7 +51,7 @@
            body
            [:hr]
            [:div.text-center
-            [:a.text-muted {:target "_blank" :href "https://github.com/herr-felix/mbti-diary.fun"} "This website is open source"]]
+            [:a.text-muted.mb-3 {:target "_blank" :href "https://github.com/herr-felix/mbti-diary.fun"} "This website is open source"]]
            ]]]))
 
 (def select-type-options (into ['("What's your type?" "")] (apply map list (repeat 2 (sort mbti-types)))))
