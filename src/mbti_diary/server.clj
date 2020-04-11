@@ -62,6 +62,6 @@
   (GET "/entry" [] wrap-params entry-form)
   (POST "/entry" [] wrap-params post-entry-form)
   (GET "/entry/:uuid" req (view-entry req))
-  (GET "/entry/delete/:uuid" req wrap-params (delete-entry req))
+  (GET "/entry/:uuid/delete" req wrap-params (delete-entry req))
   (GET "/type/:type" req (per-type req))
   (route/not-found not-found))
