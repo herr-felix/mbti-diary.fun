@@ -12,3 +12,9 @@
   (.format date-formatter date))
 
 (defn today [] (format-date (java.util.Date.)))
+
+(defn is-moderation-key [key]
+  (and
+    (some? key)
+    (= (System/getenv "MODERATION_KEY") key) ))
+

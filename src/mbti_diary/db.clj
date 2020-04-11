@@ -30,6 +30,11 @@
    (j/query sqlite-db
             ["SELECT * FROM ENTRIES WHERE ID = ?;", id])))
 
+(defn delete-entry
+  "Remove an entry"
+  [id]
+  (j/delete! sqlite-db "ENTRIES" ["id = ?" id] ))
+
 (defn get-entries
   "Get entries by type and/or date"
   [& {:keys [type date limit] :or {type nil, date nil, limit 64}}]

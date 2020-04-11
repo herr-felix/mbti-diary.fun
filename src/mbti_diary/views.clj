@@ -44,7 +44,9 @@
            [:p.text-center "What's on your mind today?"]
            (types-bare)
            [:br]
-           [:a.btn.btn-block.btn-light.font-italic {:href (if preset-type (format "/entry?type=%s" preset-type) "/entry")} "Write an entry"]
+           [:a.btn.btn-block.btn-light.font-italic 
+            {:href (if preset-type (format "/entry?type=%s" preset-type) "/entry")} 
+            "Write an entry"]
            [:br]
            body
            [:hr]

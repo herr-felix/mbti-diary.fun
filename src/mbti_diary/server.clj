@@ -6,7 +6,7 @@
    [compojure.route :as route]
    [ring.util.response :refer [redirect]]
    [ring.middleware.params :refer [wrap-params]]
-   [mbti-diary.util :refer [mbti-types uuid today]]
+   [mbti-diary.util :refer [mbti-types uuid today is-moderation-key]]
    [mbti-diary.db :as db]
    [mbti-diary.caching :as cache]
    [mbti-diary.views :as views]))
@@ -45,14 +45,23 @@
       (views/per-type type (cache/get-or-do! type #(db/get-entries :type type)))
       (redirect "/")) ))
 
-(defn not-found [_] 
+(defn delete-entry [req]
+  (let [id (get-in req [:route-params :uuid])
+        key (get-in req [:query-params "key"])]
+    (when (is-moderation-key key)
+      (do
+        (db/delete-entry id)
+        (apply cache/invalidate! (cons :home-feed mbti-types)) ))) ; Invalidate all caches
   (redirect "/"))
 
+(defn not-found [_]
+  (redirect "/"))
 
 (defroutes routes
   (GET "/" [] home)
   (GET "/entry" [] wrap-params entry-form)
   (POST "/entry" [] wrap-params post-entry-form)
   (GET "/entry/:uuid" req (view-entry req))
+  (GET "/entry/delete/:uuid" req wrap-params (delete-entry req))
   (GET "/type/:type" req (per-type req))
   (route/not-found not-found))
