@@ -1,3 +1,5 @@
+dev:
+	MODERATION_KEY="ABC" DEV_MODE=true lein run
 
 uberjar:
 	lein uberjar
