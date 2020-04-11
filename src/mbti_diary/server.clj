@@ -17,7 +17,7 @@
 
 
 (defn home [_]
-  (let [entries (cache/get-or-do! :home-feed #(db/get-entries :limit 16))]
+  (let [entries (cache/get-or-do! :home-feed #(db/get-entries :limit 64))]
        (views/home entries)))
 
 (defn entry-form [req]
