@@ -6,7 +6,7 @@
   :dependencies [[org.clojure/clojure "1.10.0"]
                  [org.clojure/java.jdbc "0.7.11"]
                  [hiccup "1.0.5"]
-                 [org.xerial/sqlite-jdbc "3.30.1"]
+                 [com.h2database/h2 "1.4.200"]
                  [http-kit "2.3.0"]
                  [compojure "1.6.1"]
                  [ring/ring-devel "1.8.0"]
